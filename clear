@@ -1,0 +1,11 @@
+[33mcommit 09769a17d7628f038eeefd7456fc229750042d09[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;32mfeat[m[33m)[m
+Author: Danila Udalchikov <githubs69@gmail.com>
+Date:   Tue Nov 12 13:54:11 2024 +0300
+
+    feat: adaptive, react router, backend request
+
+[33mcommit fc9003ca7faa2ab3d9ee2ec67c5bff9c72df8222[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Danila Udalchikov <githubs69@gmail.com>
+Date:   Mon Nov 11 14:37:31 2024 +0300
+
+    first
