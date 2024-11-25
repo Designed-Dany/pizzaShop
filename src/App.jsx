@@ -1,16 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/header";
-import NotFound from "./components/NotFound";
+import Header from "./components/Header";
 import Cart from "./pages/Cart";
 import Home from "./pages/Home";
-import "./scss/app.scss";
+import NotFound from "./pages/NotFound";
 
+import "./scss/app.scss";
 export const SearchContext = React.createContext("");
 
 function App() {
   const [searchValue, setSearchValue] = React.useState("");
-
   return (
     <>
       <div className="wrapper">
