@@ -1,19 +1,26 @@
 import React from "react";
 
+import axios from "axios";
+import qs from "qs";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { SearchContext } from "../App";
 import Categories from "../components/Categories";
 import Pagination from "../components/Pagination";
 import Pizza from "../components/Pizza";
 import Skeleton from "../components/Pizza/Skeleton";
-import Sort from "../components/Sort";
-import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
-// import qs from 'qs'
-
-import axios from "axios";
+import Sort, { list } from "../components/Sort";
+import {
+  setCategoryId,
+  setCurrentPage,
+  setFilters,
+} from "../redux/slices/filterSlice";
 
 const Home = () => {
+  const navigation = useNavigate();
   const dispatch = useDispatch();
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filters
   );
@@ -31,7 +38,8 @@ const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
-  React.useEffect(() => {
+  // функция запроса пицц
+  const fetchPizzas = () => {
     setIsLoading(true);
 
     const order = sortType.includes("-") ? "asc" : "desc"; // если в выборе сортировки есть минус,
@@ -49,8 +57,51 @@ const Home = () => {
         setItems(res.data);
         setIsLoading(false);
       });
+  };
 
+  // изначально isMounted false при первом рендере если ничего не изменилось,
+  // то он не вшывает ссылку, если изменилось, то он делает isMounted = true и выполняет вшытие,
+  // также с помощью navigation вшываем знак вопроса в ссылку, иначе без нее она не работает.
+  React.useEffect(() => {
+    if (isMounted.current) {
+      // превращаем параметры в строчку, чтобы после вшыть в адресную строку
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
+
+      navigation(`?${queryString}`); // с помощью хука navigation
+      //вшываем строчку из параметров объекта в адресную строку
+    }
+    isMounted.current = true;
+  }, [categoryId, sortType, currentPage]);
+
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1)); // парсим параметры делаем из строчки объект
+
+      const sort = list.find((obj) => obj.sortProperty === params.sortProperty);
+
+      dispatch(
+        setFilters({
+          ...params,
+          sort,
+        })
+      );
+      isSearch.current = true;
+      // если мы не делаем при парсинге параметров, isSearch.current = true,
+      // тогда при первом рендере делается запрос пицц
+    }
+  }, []);
+
+  React.useEffect(() => {
     window.scrollTo(0, 0);
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+
+    isSearch.current = false;
   }, [categoryId, sortType, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <Pizza key={obj.id} {...obj} />);
