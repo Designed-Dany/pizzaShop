@@ -4,7 +4,6 @@ import { addItem, minusItem, removeItem } from "../redux/slices/cartSlice";
 
 function CartItem({ id, title, type, size, count, price, imageUrl }) {
   const dispatch = useDispatch();
-
   const onClickPlus = () => {
     dispatch(
       addItem({
