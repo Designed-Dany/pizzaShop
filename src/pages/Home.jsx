@@ -31,9 +31,12 @@ const Home = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< feat
   React.useEffect(() => {
+=======
+>>>>>>> feat
 =======
 >>>>>>> feat
   const onChangeCategory = (id) => {
@@ -46,10 +49,14 @@ const Home = () => {
 
   // функция запроса пицц
 <<<<<<< HEAD
+<<<<<<< HEAD
   const fetchPizzas = () => {
 =======
   const fetchPizzas = async () => {
 >>>>>>> local
+>>>>>>> feat
+=======
+  const fetchPizzas = () => {
 >>>>>>> feat
     setIsLoading(true);
 
@@ -61,12 +68,16 @@ const Home = () => {
     const search = searchValue ? `&search=${searchValue}` : ""; // если в поиске есть текст тогда вставляем строчку в запрос, иначе пустая строка
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat
     axios
       .get(
         `https://6731af837aaf2a9aff1190b5.mockapi.io/items?page=${currentPage}&limit=4&${category}${search}&sortBy=${sortBy}&order=${order}`
       )
       .then((res) => {
         setItems(res.data);
+<<<<<<< HEAD
 =======
 <<<<<<< feat
     fetch(
@@ -145,6 +156,10 @@ const Home = () => {
 
     console.log(3333);
     window.scrollTo(0, 0);
+=======
+        setIsLoading(false);
+      });
+>>>>>>> feat
   };
 
   // изначально isMounted false при первом рендере если ничего не изменилось,
@@ -184,6 +199,10 @@ const Home = () => {
   }, []);
 
   React.useEffect(() => {
+<<<<<<< HEAD
+>>>>>>> feat
+=======
+    window.scrollTo(0, 0);
 >>>>>>> feat
     if (!isSearch.current) {
       fetchPizzas();
@@ -191,8 +210,11 @@ const Home = () => {
 
     isSearch.current = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> local
+>>>>>>> feat
+=======
 >>>>>>> feat
   }, [categoryId, sortType, searchValue, currentPage]);
 
