@@ -5,6 +5,11 @@ import CartEmpty from "../components/CartEmpty";
 import CartItem from "../components/CartItem";
 import { clearItems } from "../redux/slices/cartSlice";
 const Cart = () => {
+<<<<<<< HEAD
+=======
+<<<<<<< feat
+=======
+>>>>>>> feat
   const dispatch = useDispatch();
   const { totalPrice, items } = useSelector((state) => state.cart);
   const totalCount = items.reduce((sum, item) => sum + item.count, 0);
@@ -17,6 +22,11 @@ const Cart = () => {
   if (!totalPrice) {
     return <CartEmpty />;
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> local
+>>>>>>> feat
   return (
     <div className="container container--cart">
       <div class="cart">
