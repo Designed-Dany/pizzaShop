@@ -1,6 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 const Cart = () => {
+<<<<<<< feat
+=======
+  const dispatch = useDispatch();
+  const { totalPrice, items } = useSelector((state) => state.cart);
+  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const onClickClearBasket = () => {
+    if (window.confirm("Вы действительно хотите очистить всю корзину?")) {
+      dispatch(clearItems());
+    }
+  };
+
+  if (!totalPrice) {
+    return <CartEmpty />;
+  }
+
+>>>>>>> local
   return (
     <div className="container container--cart">
       <div class="cart">
