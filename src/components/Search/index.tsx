@@ -9,7 +9,6 @@ const Search: React.FC = () => {
 	const inputRef = React.useRef<HTMLInputElement>(null);
 
 	const handleClickClear = () => {
-
 		dispatch(setSearchValue(""));
 		setValue("");
 		inputRef.current?.focus();

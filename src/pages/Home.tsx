@@ -1,7 +1,7 @@
 import React from "react";
 
 import qs from "qs";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Categories from "../components/Categories";
 import Pagination from "../components/Pagination";
@@ -12,13 +12,14 @@ import {
 	selectFilter,
 	setCategoryId,
 	setCurrentPage,
-	setFilters,
+	setFilters
 } from "../redux/slices/filterSlice";
-import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzasSlice";
+import { fetchPizzas, SearchPizzaParams, selectPizzaData } from "../redux/slices/pizzasSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
 	const navigation = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const isSearch = React.useRef(false);
 	const isMounted = React.useRef(false);
 
@@ -27,13 +28,13 @@ const Home: React.FC = () => {
 		useSelector(selectFilter);
 	const sortType = sort.sortProperty;
 
-	const onChangeCategory = (id: number) => {
+	const onChangeCategory = React.useCallback((id: number) => {
 		dispatch(setCategoryId(id));
-	};
+	}, []);
 
-	const onChangePage = (page: number) => {
+	const onChangePage = React.useCallback((page: number) => {
 		dispatch(setCurrentPage(page));
-	};
+	}, []);
 
 	// функция запроса пицц
 	const getPizzas = () => {
@@ -46,13 +47,12 @@ const Home: React.FC = () => {
 
 
 		dispatch(
-			// @ts-ignore
 			fetchPizzas({
 				order,
 				sortBy,
 				category,
 				search,
-				currentPage,
+				currentPage: String(currentPage),
 			})
 		);
 	};
@@ -62,42 +62,41 @@ const Home: React.FC = () => {
 	// также с помощью navigation вшываем знак вопроса в ссылку, иначе без нее она не работает.
 	React.useEffect(() => {
 		if (isMounted.current) {
+			const params = { categoryId: categoryId > 0 ? categoryId : null, sortProperty: sort.sortProperty, currentPage }
 			// превращаем параметры в строчку, чтобы после вшыть в адресную строку
-			const queryString = qs.stringify({
-				sortProperty: sort.sortProperty,
-				categoryId,
-				currentPage,
-			});
+			const queryString = qs.stringify(params, { skipNulls: true });
 
 			navigation(`?${queryString}`); // с помощью хука navigation
 			//вшываем строчку из параметров объекта в адресную строку
 		}
-		isMounted.current = true;
-	}, [categoryId, sortType, currentPage]);
+		if (!window.location.search) {
+			dispatch(fetchPizzas({} as SearchPizzaParams))
+		}
+	}, [categoryId, sort.sortProperty, currentPage, searchValue]);
+
+	React.useEffect(() => {
+		getPizzas();
+	}, [categoryId, sortType, searchValue, currentPage]);
 
 	React.useEffect(() => {
 		if (window.location.search) {
-			const params = qs.parse(window.location.search.substring(1)); // парсим параметры делаем из строчки объект
-
-			const sort = list.find((obj) => obj.sortProperty === params.sortProperty);
-
-			dispatch(
-				setFilters({
-					...params,
-					sort,
-				})
-			);
+			const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams; // парсим параметры делаем из строчки объект
+			const sort = list.find((obj) => obj.sortProperty === params.sortBy);
+			dispatch(setFilters({
+				searchValue: params.search,
+				categoryId: Number(params.category),
+				currentPage: Number(params.currentPage),
+				sort: sort || list[0],
+			}));
 			isSearch.current = true;
 			// если мы не делаем при парсинге параметров, isSearch.current = true,
 			// тогда при первом рендере делается запрос пицц
 		}
 	}, []);
 
-	React.useEffect(() => {
-		getPizzas();
-	}, [categoryId, sortType, searchValue, currentPage]);
 
-	const pizzas = items.map((obj: any) => <Pizza key={obj.id} {...obj} />);
+
+	const pizzas = items.map((obj: any) => <Pizza {...obj} />)
 	const skeletons = [...new Array(6)].map((_, index) => (
 		<Skeleton key={index} />
 	));
@@ -106,7 +105,7 @@ const Home: React.FC = () => {
 		<div className="container">
 			<div className="content__top">
 				<Categories value={categoryId} onChangeCategory={onChangeCategory} />
-				<Sort />
+				<Sort value={sort} />
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
 			{status === "error" ? (

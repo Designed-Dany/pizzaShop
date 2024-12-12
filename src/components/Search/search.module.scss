@@ -3,7 +3,7 @@
 }
 
 .input {
-	width: 300px;
+	width: 450px;
 	border: 1px solid #fe5f1e;
 	color: black;
 	height: 45px;
@@ -14,7 +14,6 @@
 
 	&:focus {
 		border: 2px solid #fe5f1e;
-		width: 450px;
 	}
 }
 

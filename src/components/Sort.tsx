@@ -1,26 +1,29 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectSort, setSortId } from "../redux/slices/filterSlice";
-
+import { useDispatch } from "react-redux";
+import { setSortId, Sort, SortPropertyEnum } from "../redux/slices/filterSlice";
 
 // типизировали массив объектов под то, чтобы были только свойство name и sortProperty
 type ListItem = {
 	name: string;
-	sortProperty: string;
+	sortProperty: SortPropertyEnum;
 }
 
 export const list: ListItem[] = [
-	{ name: "популярности (макс)", sortProperty: "rating" },
-	{ name: "популярности (мин)", sortProperty: "-rating" },
-	{ name: "цене (макс)", sortProperty: "price" },
-	{ name: "цене (мин)", sortProperty: "-price" },
-	{ name: "алфавиту (макс)", sortProperty: "title" },
-	{ name: "алфавиту (мин)", sortProperty: "-title" },
+	{ name: "популярности (макс)", sortProperty: SortPropertyEnum.RATING_DESC },
+	{ name: "популярности (мин)", sortProperty: SortPropertyEnum.RATING_ASC },
+	{ name: "цене (макс)", sortProperty: SortPropertyEnum.PRICE_DESC },
+	{ name: "цене (мин)", sortProperty: SortPropertyEnum.PRICE_ASC },
+	{ name: "алфавиту (макс)", sortProperty: SortPropertyEnum.TITLE_DESC },
+	{ name: "алфавиту (мин)", sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-function Sort() {
+type SortPopupProps = {
+	value: Sort
+}
+
+const SortPopup: React.FC<SortPopupProps> = React.memo(({ value, }) => {
+
 	const dispatch = useDispatch();
-	const sort = useSelector(selectSort);
 	const [open, setOpen] = React.useState(false);
 	const sortRef = React.useRef<HTMLDivElement>(null);
 
@@ -36,6 +39,7 @@ function Sort() {
 				setOpen(false);
 			}
 		};
+
 
 		document.body.addEventListener("click", handleClickOutside);
 
@@ -58,16 +62,16 @@ function Sort() {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span onClick={() => setOpen(!open)}>{sort.name}</span>
+				<span onClick={() => setOpen(!open)}>{value.name}</span>
 			</div>
 			{open && (
 				<div className="sort__popup">
 					<ul>
-						{list.map((obj, i) => (
+						{list.map((obj, i: any) => (
 							<li
 								key={i}
 								onClick={() => onClickListItem(obj)}
-								className={sort === i ? "active" : ""}
+								className={value === i ? "active" : ""}
 							>
 								{obj.name}
 							</li>
@@ -77,6 +81,6 @@ function Sort() {
 			)}
 		</div>
 	);
-}
+})
 
-export default Sort;
+export default SortPopup;
