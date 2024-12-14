@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setSortId, Sort, SortPropertyEnum } from "../redux/slices/filterSlice";
+import { setSortId } from "../redux/filter/slice";
+import { Sort, SortPropertyEnum } from '../redux/filter/types';
 
 // типизировали массив объектов под то, чтобы были только свойство name и sortProperty
 type ListItem = {

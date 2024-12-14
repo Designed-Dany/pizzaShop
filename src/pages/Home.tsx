@@ -8,13 +8,15 @@ import Pagination from "../components/Pagination";
 import Pizza from "../components/Pizza";
 import Skeleton from "../components/Pizza/Skeleton";
 import Sort, { list } from "../components/Sort";
+import { selectFilter } from '../redux/filter/selectors';
 import {
-	selectFilter,
 	setCategoryId,
 	setCurrentPage,
 	setFilters
-} from "../redux/slices/filterSlice";
-import { fetchPizzas, SearchPizzaParams, selectPizzaData } from "../redux/slices/pizzasSlice";
+} from "../redux/filter/slice";
+import { selectPizzaData } from '../redux/pizza/selectors';
+import { fetchPizzas } from "../redux/pizza/slice";
+import { SearchPizzaParams } from '../redux/pizza/types';
 import { useAppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
@@ -26,6 +28,7 @@ const Home: React.FC = () => {
 	const { items, status } = useSelector(selectPizzaData);
 	const { categoryId, sort, currentPage, searchValue } =
 		useSelector(selectFilter);
+
 	const sortType = sort.sortProperty;
 
 	const onChangeCategory = React.useCallback((id: number) => {
