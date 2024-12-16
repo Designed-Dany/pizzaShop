@@ -7,7 +7,7 @@ type PaginationProps = {
 	onChangePage: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = React.memo(({ currentPage, onChangePage }) =>
+export const Pagination: React.FC<PaginationProps> = React.memo(({ currentPage, onChangePage }) =>
 
 	<ReactPaginate
 		className={styles.root}
@@ -23,4 +23,3 @@ const Pagination: React.FC<PaginationProps> = React.memo(({ currentPage, onChang
 
 
 
-export default Pagination;

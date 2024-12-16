@@ -1,6 +1,6 @@
 import ContentLoader from "react-content-loader";
 
-const Skeleton = () => (
+export const Skeleton = () => (
 	<ContentLoader
 		className="pizzaBlock"
 		speed={2}

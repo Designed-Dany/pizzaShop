@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { Search } from "../components";
 import { selectCart } from "../redux/cart/selectors";
-import Search from "./Search";
-function Header() {
+export const Header: React.FC = () => {
 	const { totalPrice, items } = useSelector(selectCart);
 	const { pathname } = useLocation();
 	const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
@@ -73,4 +73,3 @@ function Header() {
 	);
 }
 
-export default Header;

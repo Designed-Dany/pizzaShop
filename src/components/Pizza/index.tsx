@@ -14,7 +14,7 @@ export type PizzaProps = {
 	types: number[];
 }
 
-const Pizza: React.FC<PizzaProps> = ({ id, title, price, imageUrl, sizes, types }) => {
+export const Pizza: React.FC<PizzaProps> = ({ id, title, price, imageUrl, sizes, types }) => {
 	const dispatch = useDispatch();
 
 	const [activeType, setActiveType] = React.useState(0);
@@ -97,4 +97,3 @@ const Pizza: React.FC<PizzaProps> = ({ id, title, price, imageUrl, sizes, types 
 	);
 }
 
-export default Pizza;

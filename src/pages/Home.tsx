@@ -1,23 +1,18 @@
 import React from "react";
 
-import qs from "qs";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Categories from "../components/Categories";
-import Pagination from "../components/Pagination";
-import Pizza from "../components/Pizza";
-import Skeleton from "../components/Pizza/Skeleton";
-import Sort, { list } from "../components/Sort";
+import { Categories, Pagination, Pizza, Skeleton, Sort } from "../components";
+
 import { selectFilter } from '../redux/filter/selectors';
 import {
 	setCategoryId,
-	setCurrentPage,
-	setFilters
+	setCurrentPage
 } from "../redux/filter/slice";
 import { selectPizzaData } from '../redux/pizza/selectors';
 import { fetchPizzas } from "../redux/pizza/slice";
-import { SearchPizzaParams } from '../redux/pizza/types';
 import { useAppDispatch } from "../redux/store";
+
 
 const Home: React.FC = () => {
 	const navigation = useNavigate();
@@ -63,39 +58,39 @@ const Home: React.FC = () => {
 	// изначально isMounted false при первом рендере если ничего не изменилось,
 	// то он не вшывает ссылку, если изменилось, то он делает isMounted = true и выполняет вшытие,
 	// также с помощью navigation вшываем знак вопроса в ссылку, иначе без нее она не работает.
-	React.useEffect(() => {
-		if (isMounted.current) {
-			const params = { categoryId: categoryId > 0 ? categoryId : null, sortProperty: sort.sortProperty, currentPage }
-			// превращаем параметры в строчку, чтобы после вшыть в адресную строку
-			const queryString = qs.stringify(params, { skipNulls: true });
+	// React.useEffect(() => {
+	// 	if (isMounted.current) {
+	// 		const params = { categoryId: categoryId > 0 ? categoryId : null, sortProperty: sort.sortProperty, currentPage }
+	// 		// превращаем параметры в строчку, чтобы после вшыть в адресную строку
+	// 		const queryString = qs.stringify(params, { skipNulls: true });
 
-			navigation(`?${queryString}`); // с помощью хука navigation
-			//вшываем строчку из параметров объекта в адресную строку
-		}
-		if (!window.location.search) {
-			dispatch(fetchPizzas({} as SearchPizzaParams))
-		}
-	}, [categoryId, sort.sortProperty, currentPage, searchValue]);
+	// 		navigation(`?${queryString}`); // с помощью хука navigation
+	// 		//вшываем строчку из параметров объекта в адресную строку
+	// 	}
+	// 	if (!window.location.search) {
+	// 		dispatch(fetchPizzas({} as SearchPizzaParams))
+	// 	}
+	// }, [categoryId, sort.sortProperty, currentPage, searchValue]);
 
 	React.useEffect(() => {
 		getPizzas();
 	}, [categoryId, sortType, searchValue, currentPage]);
 
-	React.useEffect(() => {
-		if (window.location.search) {
-			const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams; // парсим параметры делаем из строчки объект
-			const sort = list.find((obj) => obj.sortProperty === params.sortBy);
-			dispatch(setFilters({
-				searchValue: params.search,
-				categoryId: Number(params.category),
-				currentPage: Number(params.currentPage),
-				sort: sort || list[0],
-			}));
-			isSearch.current = true;
-			// если мы не делаем при парсинге параметров, isSearch.current = true,
-			// тогда при первом рендере делается запрос пицц
-		}
-	}, []);
+	// React.useEffect(() => {
+	// 	if (window.location.search) {
+	// 		const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams; // парсим параметры делаем из строчки объект
+	// 		const sort = list.find((obj) => obj.sortProperty === params.sortBy);
+	// 		dispatch(setFilters({
+	// 			searchValue: params.search,
+	// 			categoryId: Number(params.category),
+	// 			currentPage: Number(params.currentPage),
+	// 			sort: sort || list[0],
+	// 		}));
+	// 		isSearch.current = true;
+	// 		// если мы не делаем при парсинге параметров, isSearch.current = true,
+	// 		// тогда при первом рендере делается запрос пицц
+	// 	}
+	// }, []);
 
 
 
